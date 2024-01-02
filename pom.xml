@@ -18,6 +18,8 @@
         <spring-cloud.version>2023.0.0</spring-cloud.version>
         <open-api.version>2.3.0</open-api.version>
         <java-faker.version>1.0.2</java-faker.version>
+        <avro.version>1.11.3</avro.version>
+        <avro-serializer.version>7.5.1</avro-serializer.version>
     </properties>
     <dependencies>
         <!--General dependencies-->
@@ -96,6 +98,20 @@
             <version>${open-api.version}</version>
         </dependency>
 
+        <!--Serializers Deserializers-->
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version>${avro.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.confluent/kafka-avro-serializer -->
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-avro-serializer</artifactId>
+            <version>${avro-serializer.version}</version>
+        </dependency>
+
+
         <!--Test dependencies-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -131,6 +147,17 @@
         </dependencies>
     </dependencyManagement>
 
+    <repositories>
+        <repository>
+            <id>maven</id>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
+        </repository>
+    </repositories>
+
     <build>
         <plugins>
             <plugin>
@@ -144,6 +171,23 @@
                         </exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-maven-plugin</artifactId>
+                <version>${avro.version}</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>schema</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirectory>${project.basedir}/src/main/avro/</sourceDirectory>
+                            <outputDirectory>${project.basedir}/src/main/java/avro/</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

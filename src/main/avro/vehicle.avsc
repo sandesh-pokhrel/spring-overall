@@ -1,0 +1,11 @@
+{
+  "namespace": "com.sandesh.overall.avro",
+  "type": "record",
+  "name": "Vehicle",
+  "fields": [
+    {"name": "id", "type": "long"},
+    {"name": "name", "type": "string"},
+    {"name":  "isElectric", "type":  "boolean"},
+    {"name":  "tyres", "type":  "int"}
+  ]
+}

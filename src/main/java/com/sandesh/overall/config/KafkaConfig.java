@@ -31,6 +31,8 @@ public class KafkaConfig {
     public static final String STREAMS_OUTPUT_TOPIC_NAME = "streams-output";
     public static final String TEMPERATURE_INPUT_TOPIC_NAME = "temperature-input";
     public static final String TEMPERATURE_OUTPUT_TOPIC_NAME = "temperature-output";
+    public static final String VEHICLE_INPUT_TOPIC = "vehicle-input";
+    public static final String VEHICLE_OUTPUT_TOPIC = "vehicle-output";
     public static final String TEMPERATURE_STORE = "temperature_store";
     private static final String BOOTSTRAP_SERVERS = "localhost:9092";
 
@@ -67,6 +69,11 @@ public class KafkaConfig {
     @Bean
     public NewTopic temperatureOutputTopic() {
         return new NewTopic(TEMPERATURE_OUTPUT_TOPIC_NAME, 3, (short) 1);
+    }
+
+    @Bean
+    public NewTopic vehicleInputTopic() {
+        return new NewTopic(VEHICLE_INPUT_TOPIC, 3, (short) 1);
     }
 
 

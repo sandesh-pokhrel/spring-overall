@@ -6,6 +6,8 @@ import com.sandesh.overall.serde.EmployeeDeserializer;
 import com.sandesh.overall.serde.EmployeeSerializer;
 import com.sandesh.overall.serde.TemperatureDeserializer;
 import com.sandesh.overall.serde.TemperatureSerializer;
+import io.confluent.kafka.serializers.KafkaAvroDeserializer;
+import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
@@ -16,6 +18,7 @@ import org.apache.kafka.streams.state.KeyValueStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.sandesh.overall.avro.Vehicle;
 import java.time.Duration;
 
 @Component
@@ -71,5 +74,14 @@ public class KafkaStreamsComponent {
                 employeeStream.join(employee2Stream, joiner, JoinWindows.ofTimeDifferenceWithNoGrace(Duration.ofMinutes(10)), StreamJoined.with(longSerde, employeeSerde, employeeSerde));
 
         combinedStream.to(KafkaConfig.EMPLOYEE_TOPIC_NAME_COMBINED, Produced.with(longSerde, stringSerde));
+    }
+
+    // @Autowired
+    public void processAvro(StreamsBuilder builder) {
+        final Serde<String> stringSerde = Serdes.String();
+        final Serde<Long> longSerde = Serdes.Long();
+        KStream<Long, Vehicle> vehicleStream = builder.stream(KafkaConfig.VEHICLE_INPUT_TOPIC);
+        vehicleStream.mapValues(val -> val.getName().toString().toUpperCase())
+                .to(KafkaConfig.VEHICLE_OUTPUT_TOPIC, Produced.with(longSerde, stringSerde));
     }
 }
