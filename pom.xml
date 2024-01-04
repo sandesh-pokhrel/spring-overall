@@ -111,9 +111,17 @@
         </dependency>
 
         <!--Monitoring dependencies-->
+        <!-- This directly links micrometer to prometheus and, grafana scrapes from prometheus
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
+            <scope>runtime</scope>
+        </dependency>-->
+        <!--With this opentelemetry links to micrometer then, prom connects to otlp and, grafana scrapes from prometheus
+        Benefits are otlp can collect both metrics and traces(similar to sleuth/zipkin in the past)-->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-otlp</artifactId>
             <scope>runtime</scope>
         </dependency>
 
