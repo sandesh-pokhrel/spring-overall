@@ -35,7 +35,7 @@ public class OpenTelemetryConfig {
 
     @Bean
     SdkLoggerProvider otelSdkLoggerProvider(final ObjectProvider<LogRecordProcessor> logRecordProcessors,
-                                            @Value("spring.application.name") String applicationName) {
+                                            @Value("${spring.application.name}") String applicationName) {
         final Resource resource = Resource.create(Attributes.of(ResourceAttributes.SERVICE_NAME, applicationName));
         final SdkLoggerProviderBuilder builder = SdkLoggerProvider.builder()
                 .setResource(Resource.getDefault().merge(resource));

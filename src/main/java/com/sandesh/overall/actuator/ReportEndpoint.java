@@ -1,8 +1,6 @@
 package com.sandesh.overall.actuator;
 
 import org.springframework.boot.actuate.endpoint.annotation.*;
-import org.springframework.boot.actuate.endpoint.web.annotation.EndpointWebExtension;
-import org.springframework.boot.actuate.health.HealthEndpoint;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nullable;

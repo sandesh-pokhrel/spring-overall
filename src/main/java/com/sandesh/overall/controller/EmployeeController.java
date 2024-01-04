@@ -9,20 +9,19 @@ import com.sandesh.overall.projection.IEmployeeComplex;
 import com.sandesh.overall.service.EmployeeService;
 import com.sandesh.overall.util.GenericUtil;
 import lombok.SneakyThrows;
-import org.apache.kafka.streams.KafkaStreams;
-import org.apache.kafka.streams.StoreQueryParameters;
-import org.apache.kafka.streams.state.QueryableStoreTypes;
-import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
-import org.springframework.kafka.config.StreamsBuilderFactoryBean;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
+@Slf4j
 @RestController
 public class EmployeeController {
 
@@ -40,6 +39,8 @@ public class EmployeeController {
 
     @GetMapping("/hello")
     public String sayHello() {
+        log.warn("Test warn message----");
+        log.error("Test error message----");
         return "hello";
     }
 

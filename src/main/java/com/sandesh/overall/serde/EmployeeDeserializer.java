@@ -2,7 +2,6 @@ package com.sandesh.overall.serde;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sandesh.overall.model.Employee;
-import com.sandesh.overall.model.Temperature;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.springframework.kafka.support.serializer.DeserializationException;
 

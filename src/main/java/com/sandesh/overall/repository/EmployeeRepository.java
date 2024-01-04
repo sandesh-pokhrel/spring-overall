@@ -7,8 +7,6 @@ import com.sandesh.overall.projection.IEmployeeComplex;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
-
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     @Query("select e.name from Employee e where e.id=?1")

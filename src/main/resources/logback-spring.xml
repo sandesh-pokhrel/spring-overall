@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+
+    <!-- Console appender is included from below config
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>
                 %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
             </pattern>
         </encoder>
-    </appender>
+    </appender>-->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
     <appender name="OpenTelemetry"
               class="io.opentelemetry.instrumentation.logback.appender.v1_0.OpenTelemetryAppender">
         <captureExperimentalAttributes>true</captureExperimentalAttributes>
@@ -17,7 +21,7 @@
     </appender>
 
     <root level="INFO">
-        <appender-ref ref="console"/>
+        <appender-ref ref="CONSOLE"/>
         <appender-ref ref="OpenTelemetry"/>
     </root>
 

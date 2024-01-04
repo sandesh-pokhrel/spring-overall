@@ -1,13 +1,12 @@
 package com.sandesh.overall.config;
 
+import com.sandesh.overall.avro.Vehicle;
 import com.sandesh.overall.model.Employee;
 import com.sandesh.overall.model.Temperature;
 import com.sandesh.overall.serde.EmployeeDeserializer;
 import com.sandesh.overall.serde.EmployeeSerializer;
 import com.sandesh.overall.serde.TemperatureDeserializer;
 import com.sandesh.overall.serde.TemperatureSerializer;
-import io.confluent.kafka.serializers.KafkaAvroDeserializer;
-import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
@@ -18,7 +17,6 @@ import org.apache.kafka.streams.state.KeyValueStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.sandesh.overall.avro.Vehicle;
 import java.time.Duration;
 
 @Component
