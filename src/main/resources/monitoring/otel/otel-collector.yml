@@ -19,6 +19,8 @@ exporters:
     endpoint: "tempo:4317"
     tls:
       insecure: true
+  loki:
+    endpoint: "http://loki:3100/loki/api/v1/push"
 
 extensions:
   # responsible for responding to health check calls on behalf of the collector.
@@ -35,8 +37,11 @@ service:
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [logging,prometheus]
+      exporters: [prometheus]
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [logging,otlp]
+      exporters: [otlp]
+    logs:
+      receivers: [otlp]
+      exporters: [loki,logging]

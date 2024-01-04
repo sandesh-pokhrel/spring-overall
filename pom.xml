@@ -22,6 +22,7 @@
         <avro-serializer.version>7.5.1</avro-serializer.version>
         <otel.version>1.31.0</otel.version>
         <otel-bridge.version>1.2.1</otel-bridge.version>
+        <otel-logback-appender.version>1.31.0-alpha</otel-logback-appender.version>
     </properties>
     <dependencies>
         <!--General dependencies-->
@@ -145,6 +146,11 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-tracing-bridge-otel</artifactId>
             <version>${otel-bridge.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry.instrumentation</groupId>
+            <artifactId>opentelemetry-logback-appender-1.0</artifactId>
+            <version>${otel-logback-appender.version}</version>
         </dependency>
 
         <!--Test dependencies-->
