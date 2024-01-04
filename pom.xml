@@ -20,6 +20,8 @@
         <java-faker.version>1.0.2</java-faker.version>
         <avro.version>1.11.3</avro.version>
         <avro-serializer.version>7.5.1</avro-serializer.version>
+        <otel.version>1.31.0</otel.version>
+        <otel-bridge.version>1.2.1</otel-bridge.version>
     </properties>
     <dependencies>
         <!--General dependencies-->
@@ -123,6 +125,26 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-otlp</artifactId>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-api</artifactId>
+            <version>${otel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-otlp</artifactId>
+            <version>${otel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-common</artifactId>
+            <version>${otel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-otel</artifactId>
+            <version>${otel-bridge.version}</version>
         </dependency>
 
         <!--Test dependencies-->

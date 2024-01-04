@@ -9,10 +9,16 @@ processors:
   batch:
 
 exporters:
+  logging:
+    loglevel: debug
   prometheus:
     endpoint: "0.0.0.0:8889"
     const_labels:
       label1: spring-overall
+  otlp:
+    endpoint: "tempo:4317"
+    tls:
+      insecure: true
 
 extensions:
   # responsible for responding to health check calls on behalf of the collector.
@@ -29,4 +35,8 @@ service:
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [prometheus]
+      exporters: [logging,prometheus]
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [logging,otlp]
