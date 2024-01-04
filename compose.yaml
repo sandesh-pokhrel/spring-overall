@@ -59,7 +59,7 @@ services:
     volumes:
       - "./src/main/resources/monitoring/otel:/etc/otelcol-cont/"
     ports:
-      - "1888:1888" # pprof extension
+      - "1888" # pprof extension
       - "8888:8888" # Prometheus's metrics exposed by the collector
       - "8889:8889" # Prometheus exporter metrics
       - "13133:13133" # health_check extension
