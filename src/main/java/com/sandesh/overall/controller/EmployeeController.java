@@ -8,8 +8,16 @@ import com.sandesh.overall.projection.IEmployee;
 import com.sandesh.overall.projection.IEmployeeComplex;
 import com.sandesh.overall.service.EmployeeService;
 import com.sandesh.overall.util.GenericUtil;
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationRegistry;
+import io.micrometer.observation.annotation.Observed;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -28,19 +36,58 @@ public class EmployeeController {
     private final EmployeeService employeeService;
     private final KafkaTemplate<Long, Employee> employeeKafkaTemplate;
     private final KafkaTemplate<Long, String> namesKafkaTemplate;
+    private final Timer timer;
+    private final Counter counter;
+    private final ObservationRegistry observationRegistry;
 
+    @Autowired
     public EmployeeController(EmployeeService employeeService,
+                              MeterRegistry meterRegistry,
+                              ObservationRegistry observationRegistry,
                               @Qualifier("employeeKafkaTemplate") KafkaTemplate<Long, Employee> employeeKafkaTemplate,
                               @Qualifier("namesKafkaTemplate") KafkaTemplate<Long, String> namesKafkaTemplate) {
         this.employeeService = employeeService;
         this.employeeKafkaTemplate = employeeKafkaTemplate;
         this.namesKafkaTemplate = namesKafkaTemplate;
+        this.observationRegistry = observationRegistry;
+        this.timer = meterRegistry.timer("hello.method.timer");
+        this.counter = meterRegistry.counter("hello.method.counter");
     }
 
     @GetMapping("/hello")
     public String sayHello() {
+        counter.increment();
         log.warn("Test warn message----");
         log.error("Test error message----");
+        return "hello";
+    }
+
+    @GetMapping("/hello-delayed")
+    public String sayHelloDelayed() {
+        timer.record(() -> GenericUtil.sleep(2000));
+        return "hello";
+    }
+
+    @GetMapping("/hello-timed")
+    @Timed(value = "hello.method.timer.aspect") // With this aop is used internally for timing
+    public String sayHelloTimed() {
+        GenericUtil.sleep(2000);
+        return "hello";
+    }
+
+    @GetMapping("/hello-observe")
+    public String sayHelloObserve() {
+        Observation observation = Observation.createNotStarted("hello.method.observe", observationRegistry);
+        return observation.observe(() -> {
+            GenericUtil.sleep(3000);
+            return "hello";
+        });
+    }
+
+    @GetMapping("/hello-observe-aspect")
+    @Observed(name = "hello.method.observe.aspect") // With this aop is used internally for observing
+    public String sayHelloObserveAspect() {
+        GenericUtil.sleep(3000);
         return "hello";
     }
 
