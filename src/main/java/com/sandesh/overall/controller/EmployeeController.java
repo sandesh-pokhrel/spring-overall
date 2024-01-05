@@ -15,19 +15,27 @@ import io.micrometer.core.instrument.Timer;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import io.micrometer.observation.annotation.Observed;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @Slf4j
 @RestController
@@ -110,6 +118,16 @@ public class EmployeeController {
     @GetMapping("/employees/{id}")
     public Employee getEmployeeById(@PathVariable Long id) {
         return this.employeeService.getById(id).orElse(null);
+    }
+
+    @GetMapping("/employees/{id}/hateoas")
+    public EntityModel<Employee> getEmployeeByIdHateoas(@PathVariable Long id) {
+        Employee employee = this.employeeService.getById(id).orElse(null);
+        Link selfLink = linkTo(methodOn(EmployeeController.class).getEmployeeByIdHateoas(id)).withSelfRel();
+        Link selfLinkNameOnly = GenericUtil.buildLinkFromContextPath("self_name_only", "/employees/{id}/name", id);
+        Link aggregateRoot = linkTo(methodOn(EmployeeController.class).getAllEmployees()).withRel("employees");
+        assert employee != null;
+        return EntityModel.of(employee, selfLink, selfLinkNameOnly, aggregateRoot);
     }
 
     @GetMapping("/employees-publish")
