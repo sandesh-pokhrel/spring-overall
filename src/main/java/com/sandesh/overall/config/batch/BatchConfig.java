@@ -1,4 +1,4 @@
-package com.sandesh.overall.config;
+package com.sandesh.overall.config.batch;
 
 import com.sandesh.overall.model.VideoGame;
 import jakarta.persistence.EntityManagerFactory;
@@ -42,7 +42,7 @@ public class BatchConfig {
     private final PlatformTransactionManager batchTransactionManager;
     private final JobLauncher jobLauncher;
 
-    // @Bean // Uncomment this line to run job at the beginning
+    // @Bean // Uncomment this line to run job at the beginning OR enable in property file
     public ApplicationRunner runner(Job firstJob) {
         return args -> {
             JobParameters jobParameters = new JobParametersBuilder()
