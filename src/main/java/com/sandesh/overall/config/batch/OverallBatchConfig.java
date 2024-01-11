@@ -27,7 +27,7 @@ public class OverallBatchConfig {
     private final PlatformTransactionManager batchTransactionManager;
     private final JobLauncher jobLauncher;
 
-     @Bean // Uncomment this line to run job at the beginning OR enable in property file
+    // @Bean // Uncomment this line to run job at the beginning OR enable in property file
     public ApplicationRunner runner(Job testJob) {
         return args -> {
             JobParameters jobParameters = new JobParametersBuilder()
