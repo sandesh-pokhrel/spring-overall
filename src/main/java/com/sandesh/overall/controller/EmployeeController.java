@@ -1,6 +1,7 @@
 package com.sandesh.overall.controller;
 
 import com.github.javafaker.Faker;
+import com.sandesh.overall.assembler.EmployeeModelAssembler;
 import com.sandesh.overall.config.KafkaConfig;
 import com.sandesh.overall.model.Employee;
 import com.sandesh.overall.projection.EmployeeDTO;
@@ -15,11 +16,11 @@ import io.micrometer.core.instrument.Timer;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import io.micrometer.observation.annotation.Observed;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
@@ -28,10 +29,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -47,11 +45,13 @@ public class EmployeeController {
     private final Timer timer;
     private final Counter counter;
     private final ObservationRegistry observationRegistry;
+    private final EmployeeModelAssembler employeeModelAssembler;
 
     @Autowired
     public EmployeeController(EmployeeService employeeService,
                               MeterRegistry meterRegistry,
                               ObservationRegistry observationRegistry,
+                              EmployeeModelAssembler employeeModelAssembler,
                               @Qualifier("employeeKafkaTemplate") KafkaTemplate<Long, Employee> employeeKafkaTemplate,
                               @Qualifier("namesKafkaTemplate") KafkaTemplate<Long, String> namesKafkaTemplate) {
         this.employeeService = employeeService;
@@ -60,6 +60,7 @@ public class EmployeeController {
         this.observationRegistry = observationRegistry;
         this.timer = meterRegistry.timer("hello.method.timer");
         this.counter = meterRegistry.counter("hello.method.counter");
+        this.employeeModelAssembler = employeeModelAssembler;
     }
 
     @GetMapping("/hello")
@@ -115,6 +116,12 @@ public class EmployeeController {
         return this.employeeService.getAll();
     }
 
+    @GetMapping("/employees-hateoas-assembler")
+    public CollectionModel<EntityModel<Employee>> getAllEmployeesAssembled() {
+        List<Employee> employees = this.employeeService.getAll();
+        return employeeModelAssembler.toCollectionModel(employees);
+    }
+
     @GetMapping("/employees/{id}")
     public Employee getEmployeeById(@PathVariable Long id) {
         return this.employeeService.getById(id).orElse(null);
@@ -128,6 +135,20 @@ public class EmployeeController {
         Link aggregateRoot = linkTo(methodOn(EmployeeController.class).getAllEmployees()).withRel("employees");
         assert employee != null;
         return EntityModel.of(employee, selfLink, selfLinkNameOnly, aggregateRoot);
+    }
+
+    @GetMapping("/employees/{id}/hateoas-assembler")
+    public EntityModel<Employee> getEmployeeByIdHateoasAssembler(@PathVariable Long id) {
+        Employee employee = this.employeeService.getById(id).orElse(null);
+        assert employee != null;
+        return employeeModelAssembler.toModel(employee);
+    }
+
+    @GetMapping("/employees/{id}/hateoas-processor-only")
+    public EntityModel<Employee> getEmployeeByIdHateoasProcessor(@PathVariable Long id) {
+        Employee employee = this.employeeService.getById(id).orElse(null);
+        assert employee != null;
+        return EntityModel.of(employee);
     }
 
     @GetMapping("/employees-publish")
