@@ -26,7 +26,7 @@ public class ErrorIntegrationConfig {
         return MessageChannels.direct().getObject();
     }
 
-    @Bean
+    // @Bean
     public IntegrationFlow customFlow() {
         Faker faker = new Faker();
         return IntegrationFlow
@@ -44,7 +44,7 @@ public class ErrorIntegrationConfig {
 
     }
 
-    @Bean
+    // @Bean
     public IntegrationFlow customOutputFlow() {
         return IntegrationFlow
                 .from(CUSTOM_CHANNEL)
@@ -54,7 +54,7 @@ public class ErrorIntegrationConfig {
                 }).get();
     }
 
-    @Bean
+    // @Bean
     public IntegrationFlow errorFlow() {
         return IntegrationFlow
                 .from(CUSTOM_ERROR_CHANNEL)
