@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.integration.annotation.IntegrationComponentScan;
 import org.springframework.integration.core.GenericHandler;
 import org.springframework.integration.core.GenericSelector;
@@ -26,7 +27,12 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Configuration
 @IntegrationComponentScan
+@Import(SecondIntegrationConfig.class)
 public class IntegrationConfig {
+
+    // Without channel also we can directly use string name
+    // Eg: if atob message channel is not present then also we can use string name channel("channelName")
+    // Its good practice to create channel explicitly
 
     // @Bean
     public ApplicationRunner runner(IntegrationFlowContext context) {

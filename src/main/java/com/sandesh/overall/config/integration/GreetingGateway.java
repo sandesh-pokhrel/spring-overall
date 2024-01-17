@@ -16,4 +16,7 @@ public interface GreetingGateway {
     // Otherwise if from receive channel, integration flow is not created then an exception will be thrown
     @Gateway(requestChannel = "publish", replyChannel = "receive")
     String publish(String name);
+
+    @Gateway(requestChannel = "uppercaseIn")
+    String uppercaseIn(String name);
 }
