@@ -114,7 +114,9 @@ public class KafkaConfig {
 
     @Bean(name = "employeeKafkaTemplate")
     public KafkaTemplate<Long, Employee> employeeKafkaTemplate() {
-        return new KafkaTemplate<>(employeeProducerFactory());
+        KafkaTemplate<Long, Employee> employeeKafkaTemplate = new KafkaTemplate<>(employeeProducerFactory());
+        employeeKafkaTemplate.setDefaultTopic(KafkaConfig.EMPLOYEE_TOPIC_NAME);
+        return employeeKafkaTemplate;
     }
 
     @Bean(name = "temperatureKafkaTemplate")
