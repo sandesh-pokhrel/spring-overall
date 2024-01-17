@@ -27,7 +27,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Configuration
 @IntegrationComponentScan
-@Import({SecondIntegrationConfig.class, ErrorIntegrationConfig.class, EmployeeIntegrationConfig.class})
+@Import({SecondIntegrationConfig.class, ErrorIntegrationConfig.class,
+        EmployeeIntegrationConfig.class, VgSalesIntegrationConfig.class})
 public class IntegrationConfig {
 
     // Without channel also we can directly use string name
