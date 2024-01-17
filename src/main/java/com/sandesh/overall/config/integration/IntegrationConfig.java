@@ -16,11 +16,9 @@ import org.springframework.integration.dsl.context.IntegrationFlowContext;
 import org.springframework.integration.file.dsl.Files;
 import org.springframework.integration.file.transformer.FileToStringTransformer;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.MessageBuilder;
 
 import java.io.File;
-import java.io.IOException;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Set;
@@ -48,7 +46,7 @@ public class IntegrationConfig {
         };
     }
 
-    @Bean
+    // @Bean
     public ApplicationRunner publishName(GreetingGateway greetingGateway) {
         return (args) -> {
             String upperCasedName = greetingGateway.publish("Tom Cruise");
@@ -125,7 +123,7 @@ public class IntegrationConfig {
                 }).get();
     }
 
-    @Bean
+    // @Bean
     public IntegrationFlow publishFlow() {
         return IntegrationFlow
                 .from(publish())
