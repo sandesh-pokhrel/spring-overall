@@ -95,3 +95,22 @@ services:
       - GF_INSTALL_PLUGINS=grafana-piechart-panel
     ports:
       - "3000:3000"
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.5
+    command: [ "start-dev", "--import-realm" ]
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    environment:
+      KC_DB: mysql
+      KC_DB_USERNAME: sandesh
+      KC_DB_PASSWORD: sagarmatha
+      KC_DB_URL: "jdbc:mysql://mysql:3306/overall"
+      KC_METRICS_ENABLED: true
+      KC_REALM_NAME: overall
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8087:8080"
+    volumes:
+      - "D:/Volumes/keycloak:/opt/keycloak/data/import/realm.json"

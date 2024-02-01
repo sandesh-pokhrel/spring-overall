@@ -23,6 +23,7 @@
         <otel.version>1.31.0</otel.version>
         <otel-bridge.version>1.2.1</otel-bridge.version>
         <otel-logback-appender.version>1.31.0-alpha</otel-logback-appender.version>
+        <jwt.version>4.4.0</jwt.version>
     </properties>
     <dependencies>
         <!--Starter dependencies-->
@@ -49,6 +50,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-batch</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -95,6 +100,11 @@
                     <artifactId>snakeyaml</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>${jwt.version}</version>
         </dependency>
 
         <!--DB dependencies-->
